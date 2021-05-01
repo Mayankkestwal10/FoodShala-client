@@ -49,7 +49,7 @@ const ViewOrders = () => {
                         <Navbar />
                         <div className="container" style={{marginTop:'5rem'}}>
                         <div className="row mb-3">
-                                <Link to="/user/home" style={{ color: 'black' }}><i class="fas fa-arrow-left fa-2x"></i></Link>
+                                <Link to="/restaurant/home" style={{ color: 'black' }}><i class="fas fa-arrow-left fa-2x"></i></Link>
                         </div>
                         <h3>View Orders</h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
