@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
-import { isAuthenticated } from '../utils/auth';
+import { isAuthenticated, logout } from '../utils/auth';
 import notify from '../utils/notification';
 
 const Preference = () => {
@@ -63,7 +63,6 @@ const Preference = () => {
                 address:address
             }
             axios.post(url, data).then(result => {
-                localStorage.removeItem('foodshala');
                 setDidRedirect(true);
             }).catch(err => {
                 notify('Something went wrong');
@@ -73,6 +72,7 @@ const Preference = () => {
 
 
     const performRedirect = () => {
+            logout();
             return <Redirect to="/login" />;
     }
 
