@@ -72,8 +72,9 @@ const Preference = () => {
 
 
     const performRedirect = () => {
-            logout();
-            return <Redirect to="/login" />;
+        if (user && user.role == 'customer' && didRedirect) {
+            return <Redirect to="/user/home" />;
+        }
     }
 
     return (
