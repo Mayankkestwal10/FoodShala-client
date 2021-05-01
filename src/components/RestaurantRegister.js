@@ -69,7 +69,7 @@ const RestRegister = () => {
 
     const performRedirect = () => {
         if(didRedirect){
-            return <Redirect to='/login' />
+            return <Redirect to='/user/preference' />
         }
     }
 
