@@ -63,6 +63,7 @@ const Preference = () => {
                 address:address
             }
             axios.post(url, data).then(result => {
+                localStorage.removeItem('foodshala');
                 setDidRedirect(true);
             }).catch(err => {
                 notify('Something went wrong');
@@ -72,9 +73,7 @@ const Preference = () => {
 
 
     const performRedirect = () => {
-        if (user && user.role == 'customer' && didRedirect) {
-            return <Redirect to="/user/home" />;
-        }
+            return <Redirect to="/login" />;
     }
 
     return (
