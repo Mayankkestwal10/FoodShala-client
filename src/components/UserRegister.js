@@ -51,6 +51,8 @@ const UserRegister = () => {
         )
     }
 
+    
+
     const performRedirect = () => {
         if (user && user.role=='customer' && didRedirect) {
             return <Redirect to="/user/preference" />;
@@ -94,7 +96,7 @@ const UserRegister = () => {
                 await setState({
                     ...state,
                     loading:false,
-                    error:true,
+                    error:false,
                     errMessage:'Something went wrong!'
                 });
             })
@@ -105,6 +107,9 @@ const UserRegister = () => {
    
     return (
         <div>
+            <Link to='/rest/register' style={{position:'absolute', top:'5px', left:'5px'}}>
+                <button className="btn btn-danger mx-2">Join us, register your business</button>
+            </Link>
             <div className="auth-wrapper">
             {loadingMessage()}
             {errorMessage()}

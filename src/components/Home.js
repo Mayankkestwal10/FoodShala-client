@@ -1,15 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../utils/navbar';
 import cover from '../static/images/foodShala.jpg';
-import biryani from '../static/images/biryani.jpg';
-import ice from '../static/images/ice.png';
-import snack from '../static/images/snack.jpeg';
 import Footer from '../utils/footer';
-import {Link} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import notify from '../utils/notification';
+import { isAuthenticated } from '../utils/auth';
 
 const Home = () => {
+
+    const [data, setData] = useState([]);
+
+    const fetchData = async () => {
+        const url = `${process.env.REACT_APP_LIVE}/rest/home/restaurants`;
+        axios.get(url).then(async res => {
+            await setData(res.data.restaurants);
+        }).catch((err) => [
+            notify('Something went wrong!')
+        ]);
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, []);
+
+    const showCategory = (value) => {
+        if (value == 'veg') {
+            return (<div className="d-flex">
+                <p className="badge badge-danger">Veg</p>
+            </div>)
+        }
+        if (value == 'non-veg') {
+            return (<div className="d-flex">
+                <p className="badge badge-danger">Non-Veg</p>
+            </div>)
+        }
+        if (value == 'both') {
+            return (<div className="d-flex">
+                <p className="badge badge-danger mr-2">Veg</p>
+                <p className="badge badge-danger">Non-Veg</p>
+            </div>)
+        }
+    }
+
+    const redirectTo = (value) => {
+        if( value == 'restaurant' ){
+            return <Redirect to='/restaurant/home' />
+        }else{
+            return <Redirect to='/user/home' />
+        }
+    }
+
     return (
-        <div>
+        (isAuthenticated()) ? (
+            redirectTo()
+        ):(
+            <div>
             <Navbar />
 
             <div class="container" style={{ marginTop: '100px' }}>
@@ -31,47 +77,30 @@ const Home = () => {
                     </div>
                 </div>
 
+                <div className="row justify-content-center">
+                    <h3>Top Restaurants</h3>
+                </div>
+
                 <div class="row">
-                    <div class="col-md-4 mb-5">
-                        <div class="card h-80">
-                            <img class="card-img-top" src={biryani} alt="biryani" />
-                            <div class="card-body">
-                                <h3 class="card-title">Biryani Blues</h3>
-                                <p className="text-muted">MG Road, Gurgaon</p>
-                                <div className="d-flex">
-                                    <p className="badge badge-danger mr-2">Veg</p>
-                                    <p className="badge badge-danger">Non-Veg</p>
+                    {data.map((item) => (
+                        <div class="col-md-4 mb-5">
+                            <Link to='/login' style={{textDecoration:'none'}}>
+
+                                <div class="card h-80" key={item.id}>
+                                    <img class="card-img-top" src={item.image} alt="biryani" />
+                                    <div class="card-body">
+                                        <h3 class="card-title">{item.name}</h3>
+                                        <p className="text-muted">{item.address}</p>
+                                        {showCategory(item.category)}
+                                        <p className="text-muted">{item.mobile}</p>
+                                    </div>
+
                                 </div>
-                            </div>
+                            </Link>
 
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <div class="card h-80">
-                            <img class="card-img-top" src={ice} alt="ice pice" />
-                            <div class="card-body">
-                                <h3 class="card-title">Ice Pice</h3>
-                                <p className="text-muted">Dwarka, Delhi</p>
-                                <div className="d-flex">
-                                    <p className="badge badge-danger mr-2">Veg</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <div class="card h-100">
-                            <img class="card-img-top" src={snack} alt="snack" />
-                            <div class="card-body">
-                                <h3 class="card-title">DN Snacks</h3>
-                                <p className="text-muted">Near Bangla Sahib, Delhi</p>
-                                <div className="d-flex">
-                                    <p className="badge badge-danger mr-2">Veg</p>
-                                    <p className="badge badge-danger">Non-Veg</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    ))}
+                  
                 </div>
 
             </div>
@@ -79,6 +108,8 @@ const Home = () => {
             <Footer />
 
         </div>
+        )
+      
     )
 }
 
