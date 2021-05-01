@@ -72,7 +72,6 @@ const Preference = () => {
 
 
     const performRedirect = () => {
-            logout();
             return <Redirect to="/login" />;
     }
 
